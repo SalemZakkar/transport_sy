@@ -1,9 +1,10 @@
+import 'package:core_package/core_package.dart';
 import 'package:core_package/generated/core_translation/core_translations.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transport_sy/features/auth/presentation/page/presentation/auth_login_page.dart';
 import 'package:transport_sy/features/core/presentation/page/splash_page.dart';
 import 'package:transport_sy/routes/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:transport_sy/themes/app_colors_shema.dart';
 import 'package:transport_sy/themes/app_theme.dart';
 import 'features/auth/presentation/cubit/auth_cubit.dart';
 import 'features/core/presentation/page/home_page.dart';
@@ -43,7 +44,7 @@ class _AppState extends State<App> {
       ],
       // theme: context.theme,
       locale: Locale('ar'),
-      theme: AppTheme().getThemeData(),
+      theme: AppTheme(LightAppColorSchema()).getThemeData(fontFamily: 'cairo'),
       debugShowCheckedModeBanner: false,
       routerConfig: AppRoutes.goRouterConfig,
       builder: (context, child) {

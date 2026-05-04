@@ -1,6 +1,6 @@
 
+import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class MessageDialog extends StatefulWidget {
   final String message;

@@ -1,4 +1,4 @@
-import 'package:go_router/go_router.dart';
+import 'package:core_package/core_package.dart';
 import 'package:transport_sy/features/auth/presentation/page/presentation/auth_login_page.dart';
 import 'package:transport_sy/features/core/presentation/page/home_page.dart';
 import 'package:flutter/material.dart';

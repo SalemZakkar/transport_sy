@@ -21,14 +21,19 @@ class _AuthLoginPageState extends State<AuthLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('تسجيل الدخول'),
+      ),
       body: Form(
         key: key,
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 16),
+          alignment: Alignment.center,
           constraints: const BoxConstraints.expand(),
           child: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 16,
               children: [
                 TextFormField(
                   validator: RequiredValidator(
@@ -38,22 +43,25 @@ class _AuthLoginPageState extends State<AuthLoginPage> {
                   controller: email,
                 ),
                 PasswordInputField(passwordController: password),
-                ElevatedButton(
-                  onPressed: () {
-                    if (!key.currentState!.validate()) {
-                      return;
-                    }
-                    var user = getIt<AuthCubit>().login(
-                      email.text,
-                      password.text,
-                    );
-                    if (user == null) {
-                      DialogUtil(
-                        context: context,
-                      ).showErrorDialog(message: "الحساب او كلمة السر خاطئة");
-                    }
-                  },
-                  child: Text("Login"),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (!key.currentState!.validate()) {
+                        return;
+                      }
+                      var user = getIt<AuthCubit>().login(
+                        email.text,
+                        password.text,
+                      );
+                      if (user == null) {
+                        DialogUtil(
+                          context: context,
+                        ).showErrorDialog(message: "الحساب او كلمة السر خاطئة");
+                      }
+                    },
+                    child: Text("تسجيل الدخول"),
+                  ),
                 ),
               ],
             ),
