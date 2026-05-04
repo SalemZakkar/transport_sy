@@ -1,0 +1,80 @@
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:injectable/injectable.dart';
+import 'package:transport_sy/features/auth/domain/entity/user.dart';
+
+import '../../../core/domain/entity/user_stream_signal.dart';
+import 'auth_state.dart';
+
+class AuthState {
+  AuthStateType authState;
+
+  AuthState({
+    this.authState = AuthStateType.initial,
+    this.userData,
+    this.withPush = false,
+  });
+
+  User? userData;
+
+  bool withPush;
+
+  User get user {
+    if (userData == null) {
+      throw Exception("UNAUTH");
+    }
+    return userData!;
+  }
+
+  bool get authenticated => userData != null;
+}
+
+@lazySingleton
+class AuthCubit extends HydratedCubit<AuthState> {
+  // AuthRepository authRepository;
+
+  AuthCubit() : super(AuthState()) {
+    // authRepository.authStream.listen((e) {
+    //   emitAuthState(e);
+    // });
+  }
+
+  void init() {
+    emit(state);
+  }
+
+  User? login(String email, String password) {
+    User? user = userList
+        .where((e) => e.email == email && e.password == password)
+        .firstOrNull;
+    print(user);
+    if (user != null) {
+      emit(
+        AuthState(
+          userData: user,
+          withPush: true,
+          authState: AuthStateType.authenticated,
+        ),
+      );
+    }
+    return user;
+  }
+
+  void logout() {
+    emit(AuthState(authState: AuthStateType.unAuth));
+  }
+
+  @override
+  AuthState? fromJson(Map<String, dynamic> json) {
+    final state = AuthState(
+      authState: AuthStateType.fromString(json['state']),
+      userData: userList.where((e) => e.id == json['id']).first,
+      withPush: true,
+    );
+    return state;
+  }
+
+  @override
+  Map<String, dynamic>? toJson(AuthState state) {
+    return {"state": state.authState.getString(), "id": state.userData?.id};
+  }
+}
