@@ -1,8 +1,6 @@
-import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:injectable/injectable.dart';
+import 'package:core_package/core_package.dart';
 import 'package:transport_sy/features/auth/domain/entity/user.dart';
 
-import '../../../core/domain/entity/user_stream_signal.dart';
 import 'auth_state.dart';
 
 class AuthState {
@@ -46,7 +44,6 @@ class AuthCubit extends HydratedCubit<AuthState> {
     User? user = userList
         .where((e) => e.email == email && e.password == password)
         .firstOrNull;
-    print(user);
     if (user != null) {
       emit(
         AuthState(

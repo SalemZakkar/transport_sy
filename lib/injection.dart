@@ -1,6 +1,6 @@
 
-import 'package:get_it/get_it.dart';
-import 'package:injectable/injectable.dart';
+
+import 'package:core_package/core_package.dart';
 
 import 'injection.config.dart';
 

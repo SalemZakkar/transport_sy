@@ -1,3 +1,4 @@
+import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 import 'package:core_package/core_package.dart';
 
