@@ -4,44 +4,38 @@ import '../../../core/domain/entity/base_entity.dart';
 import '../enum/user_type.dart';
 
 class User extends BaseEntity {
-  String email;
-  String password;
-  String name;
-  int balance;
+  String? name;
   final UserType type;
-  final List<Card>? card;
+  final String phone;
+  // List<KCard> cards;
+
+  bool get active => name?.isNotEmpty == true;
 
   User({
-    required this.email,
-    required this.password,
     required this.name,
-    required this.balance,
     required this.type,
-    required this.card,
     required super.deletable,
     required super.id,
+    required this.phone,
+    // required this.cards,
   });
 }
 
 List<User> userList = [
   User(
-    email: "1",
-    password: "12345678",
-    name: "Salem",
-    balance: 10000,
+    phone: "+963949123587",
     deletable: false,
     id: 0,
-    card: [],
     type: UserType.rider,
+    name: "Salem",
+    // cards: [cards[0], cards[1], cards[2]],
   ),
   User(
-    email: "2",
-    password: "12345678",
+    phone: "+963949123588",
     name: "Waseem",
-    balance: 10000,
     deletable: false,
     id: 1,
-    card: [],
     type: UserType.rider,
+    // cards: [cards[3], cards[4], cards[5]],
   ),
 ];

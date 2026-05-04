@@ -1,6 +1,7 @@
 import 'package:core_package/core_package.dart';
 import 'package:core_package/generated/core_translation/core_translations.dart';
 import 'package:transport_sy/features/auth/presentation/page/presentation/auth_login_page.dart';
+import 'package:transport_sy/features/auth/presentation/page/presentation/auth_user_complete_page.dart';
 import 'package:transport_sy/features/core/presentation/page/splash_page.dart';
 import 'package:transport_sy/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,11 @@ class _AppState extends State<App> {
               BlocListener<AuthCubit, AuthState>(
                 listener: (context, state) {
                   if (state.authenticated) {
-                    AppRoutes.goRouterConfig.go(HomePage.path);
+                    if (state.userData?.active == true) {
+                      AppRoutes.goRouterConfig.go(HomePage.path);
+                    } else {
+                      AppRoutes.goRouterConfig.go(AuthUserCompletePage.path);
+                    }
                     return;
                   }
                   AppRoutes.goRouterConfig.go(AuthLoginPage.path);

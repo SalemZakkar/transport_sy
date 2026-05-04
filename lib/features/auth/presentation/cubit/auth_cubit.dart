@@ -1,5 +1,6 @@
 import 'package:core_package/core_package.dart';
 import 'package:transport_sy/features/auth/domain/entity/user.dart';
+import 'package:transport_sy/features/auth/domain/enum/user_type.dart';
 
 import 'auth_state.dart';
 
@@ -40,19 +41,40 @@ class AuthCubit extends HydratedCubit<AuthState> {
     emit(state);
   }
 
-  User? login(String email, String password) {
-    User? user = userList
-        .where((e) => e.email == email && e.password == password)
-        .firstOrNull;
-    if (user != null) {
-      emit(
-        AuthState(
-          userData: user,
-          withPush: true,
-          authState: AuthStateType.authenticated,
-        ),
+  void complete(String name) {
+    var old = userList.where((e) => state.user.id == e.id).first;
+    old.name = name;
+    emit(
+      AuthState(
+        withPush: true,
+        userData: old,
+        authState: AuthStateType.authenticated,
+      ),
+    );
+  }
+
+  User? login(String phone) {
+    // print(phone);
+    // print("********");
+    User? user = userList.where((e) => e.phone == phone).firstOrNull;
+    if (user == null) {
+      user = User(
+        // cards: [],
+        name: null,
+        type: UserType.rider,
+        deletable: false,
+        id: userList.length,
+        phone: phone,
       );
+      userList.add(user);
     }
+    emit(
+      AuthState(
+        authState: AuthStateType.authenticated,
+        withPush: true,
+        userData: user,
+      ),
+    );
     return user;
   }
 

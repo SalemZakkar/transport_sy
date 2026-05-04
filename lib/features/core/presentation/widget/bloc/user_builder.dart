@@ -6,8 +6,9 @@ import 'package:transport_sy/injection.dart';
 
 class UserBuilder extends StatefulWidget {
   final Widget Function(User) builder;
+  final ValueChanged<User>? onInit;
 
-  const UserBuilder({super.key, required this.builder});
+  const UserBuilder({super.key, required this.builder, this.onInit});
 
   @override
   State<UserBuilder> createState() => _UserBuilderState();
@@ -15,6 +16,14 @@ class UserBuilder extends StatefulWidget {
 
 class _UserBuilderState extends State<UserBuilder> {
   final cubit = getIt<AuthCubit>();
+
+  @override
+  void initState() {
+    super.initState();
+    if (getIt<AuthCubit>().state.userData != null) {
+      widget.onInit?.call(getIt<AuthCubit>().state.userData!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
