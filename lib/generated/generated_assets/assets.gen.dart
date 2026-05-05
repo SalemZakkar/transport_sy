@@ -64,11 +64,25 @@ class $AssetsIconsGen {
   List<SvgGenImage> get values => [example];
 }
 
+class $AssetsSoundsGen {
+  const $AssetsSoundsGen();
+
+  /// File path: assets/sounds/fail.mp3
+  String get fail => 'assets/sounds/fail.mp3';
+
+  /// File path: assets/sounds/success.mp3
+  String get success => 'assets/sounds/success.mp3';
+
+  /// List of all assets
+  List<String> get values => [fail, success];
+}
+
 class Assets {
   const Assets._();
 
   static const $AssetsFontGen font = $AssetsFontGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsSoundsGen sounds = $AssetsSoundsGen();
 }
 
 class SvgGenImage {

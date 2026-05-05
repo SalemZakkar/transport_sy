@@ -5,6 +5,7 @@ import 'package:transport_sy/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:transport_sy/features/cards/domain/entity/kcard.dart';
 import 'package:transport_sy/injection.dart';
 
+@singleton
 class MyCardsCubit extends Cubit<List<KCard>> {
   MyCardsCubit() : super([]);
 
@@ -47,6 +48,7 @@ class MyCardsCubit extends Cubit<List<KCard>> {
   }
 
   void delete(int id) {
+    getIt<AuthCubit>().balance(state.where((e) => e.id == id).first.balance);
     emit(List.from(state.where((e) => e.id != id)));
   }
 
@@ -60,7 +62,7 @@ class MyCardsCubit extends Cubit<List<KCard>> {
         KCard(
           id: state.length,
           number: number,
-          balance: Random(DateTime.now().microsecond).nextInt(200000) + 10000,
+          balance: Random(DateTime.now().microsecond).nextInt(20000) + 10000,
           userId: getIt<AuthCubit>().state.user.id,
           deletable: true,
         ),

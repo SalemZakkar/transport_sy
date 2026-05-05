@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:transport_sy/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:transport_sy/injection.dart';
 
 class SettingsPage extends StatefulWidget {
   static String path = "/SettingsPage";
@@ -21,7 +23,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              
+              ElevatedButton(onPressed: getIt<AuthCubit>().logout, child: Text("Logout"))
             ],
           ),
         ),

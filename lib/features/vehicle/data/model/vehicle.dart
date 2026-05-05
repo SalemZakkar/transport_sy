@@ -1,12 +1,10 @@
-import '../../../auth/domain/entity/user.dart';
-import '../../../line/domain/entity/line.dart';
 
 class Vehicle {
-  final String id;
+  final int id;
   final String model;
-  final User driver;
+  final String driver;
   final String boardNumber;
-  final Line? currentLine;
+  final int currentLine;
 
   Vehicle({
     required this.id,
@@ -15,7 +13,14 @@ class Vehicle {
     required this.currentLine,
     required this.boardNumber,
   });
-
-  @override
-  String toString() => 'Vehicle($model, Driver: ${driver.name})';
 }
+
+List<Vehicle> vehicles = [
+  Vehicle(
+    id: 0,
+    model: "SUZUKI",
+    driver: "ALI",
+    currentLine: 0,
+    boardNumber: "123456",
+  ),
+];

@@ -19,13 +19,13 @@ class MyCardsWidget extends StatefulWidget {
 }
 
 class _MyCardsWidgetState extends State<MyCardsWidget> {
-  var cubit = MyCardsCubit();
+  var cubit = getIt<MyCardsCubit>();
 
-  @override
-  void dispose() {
-    super.dispose();
-    cubit.close();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   cubit.close();
+  // }
 
   @override
   Widget build(BuildContext context) {
