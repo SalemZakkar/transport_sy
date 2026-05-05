@@ -1,11 +1,14 @@
 import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:transport_sy/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:transport_sy/features/cards/domain/entity/kcard.dart';
 import 'package:transport_sy/features/cards/presentation/cubit/my_cards_cubit.dart';
-import 'package:transport_sy/features/cards/presentation/widgets/card_deposit_dialog.dart';
+import 'package:transport_sy/features/cards/presentation/widgets/card_add_dialog.dart';
+import 'package:transport_sy/features/cards/presentation/widgets/card_charge_dialog.dart';
 import 'package:transport_sy/features/core/presentation/dialogs/dialog_util.dart';
 import 'package:transport_sy/features/core/presentation/widget/bloc/user_builder.dart';
+import 'package:transport_sy/injection.dart';
 import 'package:transport_sy/themes/app_colors_shema.dart';
 
 class MyCardsWidget extends StatefulWidget {
@@ -50,21 +53,26 @@ class _MyCardsWidgetState extends State<MyCardsWidget> {
                                   color: LightAppColorSchema().secondary,
                                   size: 34,
                                 ),
-                                IconButton(
-                                  onPressed: () {
-                                    DialogUtil(
-                                      context: context,
-
-                                    ).showConfirmDialog(
-                                      message:
-                                          "هل تريد الغاء ربط البطاقة ؟ لن تستطيع الاستفادة منها مرة اخرى ! سيتم تحويل رصيد البطاقة لمحفظتك",
-                                    );
-                                  },
-                                  icon: Icon(
-                                    OctIcons.unlink,
-                                    color: Colors.red,
+                                if (e.deletable) ...[
+                                  IconButton(
+                                    onPressed: () {
+                                      DialogUtil(
+                                        useRoot: true,
+                                        context: context,
+                                        onAccept: () {
+                                          cubit.delete(e.id);
+                                        },
+                                      ).showConfirmDialog(
+                                        message:
+                                            "هل تريد الغاء ربط البطاقة ؟ لن تستطيع الاستفادة منها مرة اخرى ! سيتم تحويل رصيد البطاقة لمحفظتك",
+                                      );
+                                    },
+                                    icon: Icon(
+                                      OctIcons.unlink,
+                                      color: Colors.red,
+                                    ),
                                   ),
-                                ),
+                                ],
                               ],
                             ),
                             8.height(),
@@ -85,23 +93,13 @@ class _MyCardsWidgetState extends State<MyCardsWidget> {
                                   onPressed: () {
                                     showDialog(
                                       context: context,
-                                      builder: (context) => CardDepositDialog(
-                                        onChanged: (a) {
-                                          cubit.deposit(e.number, a);
-                                          // context.pop();
+                                      builder: (context) => CardChargeDialog(
+                                        onChanged: (v) {
+                                          getIt<AuthCubit>().balance(-v);
+                                          cubit.deposit(e.number, v);
                                         },
                                       ),
                                     );
-                                    // showModalBottomSheet(
-                                    //   context: context,
-                                    //   useRootNavigator: true,
-                                    //   builder: (context) => CardDepositSheet(
-                                    //     onChanged: (a, b) {
-                                    //       cubit.deposit(e.id, int.parse(b));
-                                    //       context.pop();
-                                    //     },
-                                    //   ),
-                                    // );
                                   },
                                   icon: Icon(
                                     Iconsax.wallet_add_1_bold,
@@ -135,6 +133,28 @@ class _MyCardsWidgetState extends State<MyCardsWidget> {
                     ),
                     16.height(),
                   ],
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => CardAddDialog(
+                            onChanged: (number) {
+                              if (cubit.exists(number)) {
+                                DialogUtil(context: context).showErrorDialog(
+                                  message: "البطاقة موجودة مسبقا",
+                                );
+                                return;
+                              }
+                              cubit.add(number);
+                            },
+                          ),
+                        );
+                      },
+                      child: Text("إضافة بطاقة"),
+                    ),
+                  ),
                 ],
               );
             },

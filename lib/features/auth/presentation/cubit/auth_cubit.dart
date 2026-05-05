@@ -41,6 +41,17 @@ class AuthCubit extends HydratedCubit<AuthState> {
     emit(state);
   }
 
+  void balance(int amount) {
+    state.userData?.balance += amount;
+    emit(
+      AuthState(
+        authState: AuthStateType.authenticated,
+        userData: state.userData,
+        withPush: false,
+      ),
+    );
+  }
+
   void complete(String name) {
     var old = userList.where((e) => state.user.id == e.id).first;
     old.name = name;

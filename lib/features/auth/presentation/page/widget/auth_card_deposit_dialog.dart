@@ -1,9 +1,6 @@
 import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:transport_sy/features/cards/domain/entity/card.dart';
-import 'package:transport_sy/features/cards/presentation/cubit/my_cards_cubit.dart';
-import 'package:transport_sy/injection.dart';
 
 class CardDepositDialog extends StatefulWidget {
   const CardDepositDialog({super.key, required this.onChanged});

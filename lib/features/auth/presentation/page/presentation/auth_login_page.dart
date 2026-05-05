@@ -1,9 +1,7 @@
 import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
-import 'package:transport_sy/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:transport_sy/features/auth/presentation/page/presentation/auth_verify_otp_page.dart';
 import 'package:transport_sy/features/core/presentation/widget/fields/phone_number_text_field.dart';
-import 'package:transport_sy/injection.dart';
 
 class AuthLoginPage extends StatefulWidget {
   static String path = "/AuthLoginPage";

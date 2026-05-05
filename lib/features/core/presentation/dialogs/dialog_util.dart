@@ -51,19 +51,52 @@ class DialogUtil {
 
   Future<void> showErrorDialog({String? message}) async {
     onShow?.call();
-    QuickAlert.show(
+    await showDialog(
       context: context,
-      type: QuickAlertType.error,
-      titleColor: Theme.of(context).textTheme.headlineSmall!.color!,
-      textColor: Theme.of(context).textTheme.headlineSmall!.color!,
-      title: message ?? CoreTranslations.of(context)!.success,
-      onConfirmBtnTap: () {
-        context.pop();
-        onAccept?.call();
+      useRootNavigator: useRoot,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          backgroundColor: Theme.of(context).cardColor,
+          title: Row(
+            children: [
+              const Icon(Icons.error_outline, color: Colors.red, size: 28),
+              const SizedBox(width: 8),
+              const Text("خطأ", style: TextStyle(fontWeight: FontWeight.bold)),
+            ],
+          ),
+          content: Text(
+            message ?? "حدث خطأ ما، يرجى المحاولة مرة أخرى",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          actionsPadding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+            bottom: 16,
+          ),
+          actions: [
+            ConstrainedBox(
+              constraints: const BoxConstraints(minWidth: 91, minHeight: 41),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                onPressed: () {
+                  context.pop();
+                  onAccept?.call();
+                },
+                child: const Text("حسناً"),
+              ),
+            ),
+          ],
+        );
       },
-      backgroundColor: Theme.of(context).cardColor,
-      confirmBtnText: CoreTranslations.of(context)!.ok,
-      // confirmBtnColor: context.appColorSchema.statusColors.success,
     );
   }
 
@@ -74,7 +107,9 @@ class DialogUtil {
       useRootNavigator: useRoot,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           backgroundColor: Theme.of(context).cardColor,
           title: Text(
             title ?? "تأكيد العملية",
@@ -85,23 +120,26 @@ class DialogUtil {
             message ?? "هل أنت متأكد من الاستمرار في هذا الإجراء؟",
             style: Theme.of(context).textTheme.bodyLarge,
           ),
-          actionsPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+          actionsPadding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+            bottom: 16,
+          ),
           actions: [
             TextButton(
               onPressed: () {
                 context.pop();
                 onCancel?.call();
               },
-              child: Text(
-                "إلغاء",
-                style: TextStyle(color: Colors.grey[600]),
-              ),
+              child: Text("إلغاء", style: TextStyle(color: Colors.grey[600])),
             ),
             ConstrainedBox(
               constraints: const BoxConstraints(minWidth: 91, minHeight: 41),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
                 onPressed: () {
                   context.pop();

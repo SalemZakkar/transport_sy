@@ -1,31 +1,59 @@
-import '../../../auth/domain/entity/user.dart';
-import '../../../auth/domain/enum/user_type.dart';
-import '../../../vehicle/data/model/vehicle.dart';
 
 class Trip {
-  final String id;
-  final Vehicle vehicle;
-  final User rider; // Must be a rider
-  final String lineName; // Historical line name (snapshot at trip time)
+  final int id;
+  final int user;
+  final String lineName;
   final DateTime startTime;
   final DateTime? endTime;
+  final String boardNumber;
+  final int amount;
 
   Trip({
     required this.id,
-    required this.vehicle,
-    required this.rider,
     required this.lineName,
     required this.startTime,
     this.endTime,
+    required this.boardNumber,
+    required this.amount,
+    required this.user,
   }) {
-    if (rider.type != UserType.rider) {
-      throw ArgumentError('Trip rider must be of type UserType.rider');
-    }
     if (endTime != null && endTime!.isBefore(startTime)) {
       throw ArgumentError('End time cannot be before start time');
     }
   }
-
-  @override
-  String toString() => 'Trip on $lineName by ${rider.name}';
 }
+
+List<Trip> trips = [
+  Trip(
+    id: 0,
+    lineName: "خط حماة ساحة العاصي",
+    startTime: DateTime.now().subtract(Duration(days: 2)),
+    boardNumber: "113253",
+    amount: 2000,
+    user: 1,
+  ),
+  Trip(
+    id: 1,
+    lineName: "خط حماة الاربعين",
+    startTime: DateTime.now().subtract(Duration(days: 8)),
+    boardNumber: "113253",
+    amount: 2000,
+    user: 1,
+  ),
+  Trip(
+    id: 2,
+    lineName: "خط حماة السوق",
+    startTime: DateTime.now().subtract(Duration(days: 3)),
+    boardNumber: "113253",
+    amount: 2000,
+    user: 1,
+  ),
+  Trip(
+    id: 3,
+    lineName: "خط حماة الشريعة",
+    startTime: DateTime.now().subtract(Duration(days: 1)),
+    boardNumber: "113253",
+    amount: 2000,
+    user: 1,
+  ),
+];

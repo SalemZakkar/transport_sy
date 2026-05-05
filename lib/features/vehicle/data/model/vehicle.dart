@@ -5,6 +5,7 @@ class Vehicle {
   final String id;
   final String model;
   final User driver;
+  final String boardNumber;
   final Line? currentLine;
 
   Vehicle({
@@ -12,6 +13,7 @@ class Vehicle {
     required this.model,
     required this.driver,
     required this.currentLine,
+    required this.boardNumber,
   });
 
   @override

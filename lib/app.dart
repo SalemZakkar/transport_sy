@@ -2,7 +2,7 @@ import 'package:core_package/core_package.dart';
 import 'package:core_package/generated/core_translation/core_translations.dart';
 import 'package:transport_sy/features/auth/presentation/page/presentation/auth_login_page.dart';
 import 'package:transport_sy/features/auth/presentation/page/presentation/auth_user_complete_page.dart';
-import 'package:transport_sy/features/core/presentation/page/splash_page.dart';
+import 'package:transport_sy/features/trips/presentation/page/trip_logs_page.dart';
 import 'package:transport_sy/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:transport_sy/themes/app_colors_shema.dart';
@@ -23,10 +23,10 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    AppRoutes.init(SplashPage.path);
+    AppRoutes.init(TripLogsPage.path);
     // ScreenLoader.setDialogProvider(MainScreenLoaderDialogProvider());
     WidgetsBinding.instance.addPostFrameCallback((e) {
-      getIt<AuthCubit>().init();
+      // getIt<AuthCubit>().init();
     });
   }
 
@@ -56,6 +56,9 @@ class _AppState extends State<App> {
               BlocListener<AuthCubit, AuthState>(
                 listener: (context, state) {
                   if (state.authenticated) {
+                    if (!state.withPush) {
+                      return;
+                    }
                     if (state.userData?.active == true) {
                       AppRoutes.goRouterConfig.go(HomePage.path);
                     } else {
