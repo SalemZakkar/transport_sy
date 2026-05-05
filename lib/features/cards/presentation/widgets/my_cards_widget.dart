@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:transport_sy/features/cards/domain/entity/card.dart';
 import 'package:transport_sy/features/cards/presentation/cubit/my_cards_cubit.dart';
+import 'package:transport_sy/features/cards/presentation/widgets/card_deposit_dialog.dart';
+import 'package:transport_sy/features/core/presentation/dialogs/dialog_util.dart';
 import 'package:transport_sy/features/core/presentation/widget/bloc/user_builder.dart';
 import 'package:transport_sy/themes/app_colors_shema.dart';
 
@@ -15,6 +17,12 @@ class MyCardsWidget extends StatefulWidget {
 
 class _MyCardsWidgetState extends State<MyCardsWidget> {
   var cubit = MyCardsCubit();
+
+  @override
+  void dispose() {
+    super.dispose();
+    cubit.close();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +51,15 @@ class _MyCardsWidgetState extends State<MyCardsWidget> {
                                   size: 34,
                                 ),
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    DialogUtil(
+                                      context: context,
+
+                                    ).showConfirmDialog(
+                                      message:
+                                          "هل تريد الغاء ربط البطاقة ؟ لن تستطيع الاستفادة منها مرة اخرى ! سيتم تحويل رصيد البطاقة لمحفظتك",
+                                    );
+                                  },
                                   icon: Icon(
                                     OctIcons.unlink,
                                     color: Colors.red,
@@ -66,7 +82,27 @@ class _MyCardsWidgetState extends State<MyCardsWidget> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => CardDepositDialog(
+                                        onChanged: (a) {
+                                          cubit.deposit(e.number, a);
+                                          // context.pop();
+                                        },
+                                      ),
+                                    );
+                                    // showModalBottomSheet(
+                                    //   context: context,
+                                    //   useRootNavigator: true,
+                                    //   builder: (context) => CardDepositSheet(
+                                    //     onChanged: (a, b) {
+                                    //       cubit.deposit(e.id, int.parse(b));
+                                    //       context.pop();
+                                    //     },
+                                    //   ),
+                                    // );
+                                  },
                                   icon: Icon(
                                     Iconsax.wallet_add_1_bold,
                                     size: 32,

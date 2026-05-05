@@ -26,8 +26,8 @@ class MyCardsCubit extends Cubit<List<KCard>> {
     return false;
   }
 
-  void deposit(int id, int amount) {
-    final index = cards.indexWhere((e) => e.id == id);
+  void deposit(String cardNumber, int amount) {
+    final index = cards.indexWhere((e) => e.number == cardNumber);
     if (index != -1) {
       final card = cards[index];
       cards[index] = KCard(
