@@ -13,7 +13,9 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("الخريطة"),
+      ),
       body: Container(
         constraints: const BoxConstraints.expand(),
         child: SingleChildScrollView(
