@@ -2,6 +2,7 @@ import 'package:core_package/core_package.dart';
 import 'package:core_package/generated/core_translation/core_translations.dart';
 import 'package:transport_sy/features/auth/presentation/page/presentation/auth_login_page.dart';
 import 'package:transport_sy/features/auth/presentation/page/presentation/auth_user_complete_page.dart';
+import 'package:transport_sy/features/core/presentation/page/splash_page.dart';
 import 'package:transport_sy/features/trips/presentation/page/trip_logs_page.dart';
 import 'package:transport_sy/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -23,10 +24,10 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    AppRoutes.init(TripLogsPage.path);
+    AppRoutes.init(SplashPage.path);
     // ScreenLoader.setDialogProvider(MainScreenLoaderDialogProvider());
     WidgetsBinding.instance.addPostFrameCallback((e) {
-      // getIt<AuthCubit>().init();
+      getIt<AuthCubit>().init();
     });
   }
 
