@@ -13,13 +13,15 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("الإعدادات"),
+      ),
       body: Container(
         constraints: const BoxConstraints.expand(),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              //
+              
             ],
           ),
         ),

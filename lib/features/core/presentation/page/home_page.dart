@@ -1,9 +1,6 @@
 import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
-import 'package:transport_sy/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:transport_sy/features/cards/presentation/widgets/my_cards_widget.dart';
-import 'package:transport_sy/features/core/presentation/widget/bloc/user_builder.dart';
-import 'package:transport_sy/injection.dart';
 
 class HomePage extends StatefulWidget {
   static String path = "/HomePage";

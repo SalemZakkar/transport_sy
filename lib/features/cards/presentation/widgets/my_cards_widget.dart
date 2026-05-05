@@ -1,7 +1,7 @@
 import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:transport_sy/features/cards/domain/entity/card.dart';
+import 'package:transport_sy/features/cards/domain/entity/kcard.dart';
 import 'package:transport_sy/features/cards/presentation/cubit/my_cards_cubit.dart';
 import 'package:transport_sy/features/cards/presentation/widgets/card_deposit_dialog.dart';
 import 'package:transport_sy/features/core/presentation/dialogs/dialog_util.dart';

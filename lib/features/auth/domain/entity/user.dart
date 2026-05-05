@@ -1,4 +1,3 @@
-import 'package:transport_sy/features/cards/domain/entity/card.dart';
 
 import '../../../core/domain/entity/base_entity.dart';
 import '../enum/user_type.dart';

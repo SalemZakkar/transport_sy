@@ -6,8 +6,8 @@ import 'package:transport_sy/features/core/presentation/page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:transport_sy/features/core/presentation/page/nav_page.dart';
 import 'package:transport_sy/features/core/presentation/page/splash_page.dart';
-import 'package:transport_sy/features/map_page.dart';
-import 'package:transport_sy/features/settings_page.dart';
+import 'package:transport_sy/features/map/presentation/map_page.dart';
+import 'package:transport_sy/features/settings/presentation/settings_page.dart';
 
 class AppRoutes {
   static final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -22,17 +22,17 @@ class AppRoutes {
     );
   }
 
-  static List<String> tabs = [HomePage.path, SettingsPage.path, MapPage.path];
+  static List<String> tabs = [HomePage.path, MapPage.path, SettingsPage.path];
   static List<RouteBase> routes = [
     ShellRoute(
       builder: (context, state, child) => NavPage(child: child),
       routes: [
         GoRoute(builder: (context, state) => HomePage(), path: HomePage.path),
+        GoRoute(builder: (context, state) => MapPage(), path: MapPage.path),
         GoRoute(
           builder: (context, state) => SettingsPage(),
           path: SettingsPage.path,
         ),
-        GoRoute(builder: (context, state) => MapPage(), path: MapPage.path),
       ],
     ),
     GoRoute(builder: (context, state) => HomePage(), path: HomePage.path),

@@ -1,5 +1,5 @@
 import 'package:core_package/core_package.dart';
-import 'package:transport_sy/features/cards/domain/entity/card.dart';
+import 'package:transport_sy/features/cards/domain/entity/kcard.dart';
 
 class MyCardsCubit extends Cubit<List<KCard>> {
   MyCardsCubit() : super([]);

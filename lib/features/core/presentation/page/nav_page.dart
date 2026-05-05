@@ -39,7 +39,7 @@ class _NavPageState extends State<NavPage> {
               ),
               BottomNavigationBarItem(
                 label: "الخريطة",
-                icon: Icon(Icons.directions),
+                icon: Icon(Icons.map),
               ),
               BottomNavigationBarItem(
                 label: "الإعدادات",
