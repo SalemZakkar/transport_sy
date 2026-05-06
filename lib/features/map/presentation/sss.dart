@@ -5,7 +5,6 @@ import 'package:core_package/core_package.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter_compass/flutter_compass.dart';
 import 'package:transport_sy/features/line/domain/entity/line.dart';
 import 'package:transport_sy/generated/generated_assets/assets.gen.dart';
 
@@ -58,10 +57,10 @@ double _bearing(LatLng from, LatLng to) {
 }
 
 Future<BitmapDescriptor> _rotatedBitmap(
-  String assetPath,
-  double degrees, {
-  int size = 80,
-}) async {
+    String assetPath,
+    double degrees, {
+      int size = 80,
+    }) async {
   final data = await rootBundle.load(assetPath);
   final bytes = data.buffer.asUint8List();
   final codec = await ui.instantiateImageCodec(
@@ -129,10 +128,8 @@ class _MapPageState extends State<MapPage> {
 
   Timer? _animTimer;
   Timer? _locationTimer;
-  StreamSubscription? _compassSubscription;
 
   BitmapDescriptor? _busIconBase;
-  BitmapDescriptor? _arrowIconBase;
 
   LatLng? _myLocation;
   double _myBearing = 0;
@@ -153,60 +150,28 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    _loadBaseIcons().then((_) {
+    _loadBaseIcon().then((_) {
       _buildPolylines();
       _initBuses();
     });
     _startLocationTracking();
-    _startCompassTracking();
   }
 
   @override
   void dispose() {
     _animTimer?.cancel();
     _locationTimer?.cancel();
-    _compassSubscription?.cancel();
     super.dispose();
   }
 
-  // ── Asset icons ────────────────────────────────────────────────────────────
+  // ── Asset icon ─────────────────────────────────────────────────────────────
 
-  Future<void> _loadBaseIcons() async {
+  Future<void> _loadBaseIcon() async {
     _busIconBase = await _rotatedBitmap(
       Assets.icons.busMarker.path,
       0,
       size: 80,
     );
-    _arrowIconBase = await _rotatedBitmap(
-      Assets.icons.arrow.path,
-      0,
-      size: 128,
-    );
-  }
-
-  // ── Compass tracking ───────────────────────────────────────────────────────
-
-  void _startCompassTracking() {
-    _compassSubscription = FlutterCompass.events?.listen((event) {
-      final heading = event.heading;
-      if (heading == null || !mounted) return;
-
-      setState(() {
-        _myBearing = heading;
-        if (_myLocation != null) {
-          _markers[_myLocId] = Marker(
-            markerId: _myLocId,
-            position: _myLocation!,
-            icon: _arrowIconBase ?? BitmapDescriptor.defaultMarker,
-            rotation: _myBearing,
-            anchor: const Offset(0.5, 0.5),
-            flat: true,
-            zIndex: 10,
-            infoWindow: const InfoWindow(title: 'موقعي'),
-          );
-        }
-      });
-    });
   }
 
   // ── Live location ──────────────────────────────────────────────────────────
@@ -221,7 +186,7 @@ class _MapPageState extends State<MapPage> {
     await _updateLocation();
     _locationTimer = Timer.periodic(
       const Duration(seconds: 3),
-      (_) => _updateLocation(),
+          (_) => _updateLocation(),
     );
   }
 
@@ -232,14 +197,23 @@ class _MapPageState extends State<MapPage> {
       );
       final newLatLng = LatLng(pos.latitude, pos.longitude);
 
+      double newBearing = _myBearing;
+      if (_myLocation != null) newBearing = _bearing(_myLocation!, newLatLng);
+
+      final icon = await _rotatedBitmap(
+        Assets.icons.arrow.path,
+        newBearing,
+        size: 128,
+      );
+
       if (!mounted) return;
       setState(() {
         _myLocation = newLatLng;
+        _myBearing = newBearing;
         _markers[_myLocId] = Marker(
           markerId: _myLocId,
           position: newLatLng,
-          icon: _arrowIconBase ?? BitmapDescriptor.defaultMarker,
-          rotation: _myBearing,
+          icon: icon,
           anchor: const Offset(0.5, 0.5),
           flat: true,
           zIndex: 10,
@@ -511,7 +485,7 @@ class _MapPageState extends State<MapPage> {
     for (final entry in _markers.entries) {
       if (entry.key == _myLocId) continue;
       final bus = _buses.firstWhere(
-        (b) => b.markerId == entry.key,
+            (b) => b.markerId == entry.key,
         orElse: () => _buses.first,
       );
       final visible =
