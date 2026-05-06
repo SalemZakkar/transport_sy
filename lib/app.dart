@@ -26,7 +26,6 @@ class _AppState extends State<App> {
     AppRoutes.init(SplashPage.path);
     // ScreenLoader.setDialogProvider(MainScreenLoaderDialogProvider());
     WidgetsBinding.instance.addPostFrameCallback((e) {
-      getIt<AuthCubit>().init();
     });
   }
 
