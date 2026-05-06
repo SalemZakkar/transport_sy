@@ -37,7 +37,7 @@ class _AuthVerifyOtpPageState extends State<AuthVerifyOtpPage> {
                 PinEntryTextField(
                   fields: 6,
                   onSubmit: (v) {
-                    getIt<AuthCubit>().login(widget.phone);
+                    getIt<AuthCubit>().login();
                   },
                 ),
                 16.height(),
@@ -46,7 +46,7 @@ class _AuthVerifyOtpPageState extends State<AuthVerifyOtpPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (key.currentState!.validate()) {
-                        getIt<AuthCubit>().login(widget.phone);
+                        getIt<AuthCubit>().login();
                       }
                     },
                     child: Text(context.coreTranslations.continuE),

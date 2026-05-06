@@ -71,6 +71,16 @@ class $AssetsIconsGen {
   List<dynamic> get values => [arrow, busMarker, example];
 }
 
+class $AssetsImagesGen {
+  const $AssetsImagesGen();
+
+  /// File path: assets/images/logo.jpeg
+  AssetGenImage get logo => const AssetGenImage('assets/images/logo.jpeg');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [logo];
+}
+
 class $AssetsSoundsGen {
   const $AssetsSoundsGen();
 
@@ -89,6 +99,7 @@ class Assets {
 
   static const $AssetsFontGen font = $AssetsFontGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsSoundsGen sounds = $AssetsSoundsGen();
 }
 
