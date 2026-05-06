@@ -5,6 +5,7 @@ import 'package:transport_sy/generated/generated_assets/assets.gen.dart';
 
 class SplashPage extends StatefulWidget {
   static const path = "/SplashPage";
+
   const SplashPage({super.key});
 
   @override
@@ -31,14 +32,18 @@ class _SplashPageState extends State<SplashPage>
     // 🟢 FADE: In (0-30%) → Hold (30-60%) → Out (60-100%)
     _fadeAnimation = TweenSequence<double>([
       TweenSequenceItem(
-        tween: Tween(begin: 0.0, end: 1.0)
-            .chain(CurveTween(curve: Curves.easeOutCubic)),
+        tween: Tween(
+          begin: 0.0,
+          end: 1.0,
+        ).chain(CurveTween(curve: Curves.easeOutCubic)),
         weight: 30,
       ),
       TweenSequenceItem(tween: ConstantTween(1.0), weight: 30),
       TweenSequenceItem(
-        tween: Tween(begin: 1.0, end: 0.0)
-            .chain(CurveTween(curve: Curves.easeInCubic)),
+        tween: Tween(
+          begin: 1.0,
+          end: 0.0,
+        ).chain(CurveTween(curve: Curves.easeInCubic)),
         weight: 40,
       ),
     ]).animate(_controller);
@@ -46,28 +51,38 @@ class _SplashPageState extends State<SplashPage>
     // 📏 SCALE: Pop in → Settle → Gentle pulse → Shrink on exit
     _scaleAnimation = TweenSequence<double>([
       TweenSequenceItem(
-        tween: Tween(begin: 0.6, end: 1.05)
-            .chain(CurveTween(curve: Curves.easeOutBack)),
+        tween: Tween(
+          begin: 0.6,
+          end: 1.05,
+        ).chain(CurveTween(curve: Curves.easeOutBack)),
         weight: 25,
       ),
       TweenSequenceItem(
-        tween: Tween(begin: 1.05, end: 1.0)
-            .chain(CurveTween(curve: Curves.easeInOut)),
+        tween: Tween(
+          begin: 1.05,
+          end: 1.0,
+        ).chain(CurveTween(curve: Curves.easeInOut)),
         weight: 15,
       ),
       TweenSequenceItem(
-        tween: Tween(begin: 1.0, end: 1.03)
-            .chain(CurveTween(curve: Curves.easeInOut)),
+        tween: Tween(
+          begin: 1.0,
+          end: 1.03,
+        ).chain(CurveTween(curve: Curves.easeInOut)),
         weight: 10,
       ),
       TweenSequenceItem(
-        tween: Tween(begin: 1.03, end: 1.0)
-            .chain(CurveTween(curve: Curves.easeInOut)),
+        tween: Tween(
+          begin: 1.03,
+          end: 1.0,
+        ).chain(CurveTween(curve: Curves.easeInOut)),
         weight: 10,
       ),
       TweenSequenceItem(
-        tween: Tween(begin: 1.0, end: 0.85)
-            .chain(CurveTween(curve: Curves.easeIn)),
+        tween: Tween(
+          begin: 1.0,
+          end: 0.85,
+        ).chain(CurveTween(curve: Curves.easeIn)),
         weight: 40,
       ),
     ]).animate(_controller);
@@ -76,8 +91,10 @@ class _SplashPageState extends State<SplashPage>
     _slideAnimation = TweenSequence<Offset>([
       TweenSequenceItem(tween: ConstantTween(Offset.zero), weight: 60),
       TweenSequenceItem(
-        tween: Tween(begin: Offset.zero, end: const Offset(0, -0.15))
-            .chain(CurveTween(curve: Curves.easeIn)),
+        tween: Tween(
+          begin: Offset.zero,
+          end: const Offset(0, -0.15),
+        ).chain(CurveTween(curve: Curves.easeIn)),
         weight: 40,
       ),
     ]).animate(_controller);
@@ -85,7 +102,9 @@ class _SplashPageState extends State<SplashPage>
     // 🔁 Trigger navigation exactly when animation completes
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        getIt<AuthCubit>().init();
+        WidgetsBinding.instance.addPostFrameCallback((e) {
+          getIt<AuthCubit>().init();
+        });
       }
     });
 
@@ -110,10 +129,7 @@ class _SplashPageState extends State<SplashPage>
               translation: _slideAnimation.value,
               child: Transform.scale(
                 scale: _scaleAnimation.value,
-                child: Opacity(
-                  opacity: _fadeAnimation.value,
-                  child: child,
-                ),
+                child: Opacity(opacity: _fadeAnimation.value, child: child),
               ),
             );
           },
@@ -130,10 +146,7 @@ class _SplashPageState extends State<SplashPage>
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(32),
-              child: Assets.images.logo.image(
-                width: 180,
-                fit: BoxFit.contain,
-              ),
+              child: Assets.images.logo.image(width: 180, fit: BoxFit.contain),
             ),
           ),
         ),

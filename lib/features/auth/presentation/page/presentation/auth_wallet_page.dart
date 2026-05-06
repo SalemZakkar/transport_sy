@@ -134,7 +134,7 @@ class _AuthWalletPageState extends State<AuthWalletPage> {
                                 ),
                               ),
                               subtitle: Text(
-                                "${e.createdAt.year}-${e.createdAt.month}-${e.createdAt.day} ${e.createdAt.hour}:${e.createdAt.minute}",
+                                e.createdAt.formateDateLocaled(dateTimePattern: DateTimePattern.dMmmYDotHhMmSsA, context: context),
                                 style: const TextStyle(fontSize: 12),
                               ),
                               trailing: Text(

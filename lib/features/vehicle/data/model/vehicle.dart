@@ -20,7 +20,21 @@ List<Vehicle> vehicles = [
     id: 0,
     model: "SUZUKI",
     driver: "ALI",
-    currentLine: 0,
-    boardNumber: "123456",
+    currentLine: 1,
+    boardNumber: "34562",
+  ),
+  Vehicle(
+    id: 1,
+    model: "BMW",
+    driver: "Salem",
+    currentLine: 2,
+    boardNumber: "766980",
+  ),
+  Vehicle(
+    id: 2,
+    model: "honk",
+    driver: "John",
+    currentLine: 3,
+    boardNumber: "223645",
   ),
 ];

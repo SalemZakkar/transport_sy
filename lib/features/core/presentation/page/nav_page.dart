@@ -25,11 +25,14 @@ class _NavPageState extends State<NavPage> {
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: 72,
+
           child: BottomNavigationBar(
             onTap: (v) {
               AppRoutes.goRouterConfig.go(AppRoutes.tabs[v]);
             },
-            currentIndex: AppRoutes.tabs.indexOf(
+            currentIndex: !AppRoutes.tabs.contains(
+              GoRouter.of(context).state.path!,
+            ) ? 0 : AppRoutes.tabs.indexOf(
               GoRouter.of(context).state.path!,
             ),
             items: [

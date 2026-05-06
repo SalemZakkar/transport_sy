@@ -27,21 +27,24 @@ class AppRoutes {
   static List<String> tabs = [HomePage.path, MapPage.path, SettingsPage.path];
   static List<RouteBase> routes = [
     ShellRoute(
-      navigatorKey: rootNavigatorKey,
+      // navigatorKey: rootNavigatorKey,
       // pageBuilder: (context , state , child) => NoTransitionPage(child: child),
       builder: (context, state, child) => NavPage(child: child),
       routes: [
         GoRoute(
           // parentNavigatorKey: rootNavigatorKey,
+          pageBuilder: (context , state) => NoTransitionPage(child: HomePage()),
           builder: (context, state) => HomePage(),
           path: HomePage.path,
         ),
         GoRoute(
           // parentNavigatorKey: rootNavigatorKey,
+          pageBuilder: (context , state) => NoTransitionPage(child: MapPage()),
           builder: (context, state) => MapPage(),
           path: MapPage.path,
         ),
         GoRoute(
+          pageBuilder: (context , state) => NoTransitionPage(child: SettingsPage()),
           // parentNavigatorKey: rootNavigatorKey,
           builder: (context, state) => SettingsPage(),
           path: SettingsPage.path,

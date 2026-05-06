@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:transport_sy/features/auth/domain/entity/user.dart';
 import 'package:transport_sy/features/auth/domain/enum/user_type.dart';
 import 'package:transport_sy/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:transport_sy/features/auth/presentation/page/presentation/auth_wallet_page.dart';
 import 'package:transport_sy/features/core/presentation/widget/bloc/user_builder.dart';
 import 'package:transport_sy/features/trips/presentation/page/trip_logs_page.dart';
 import 'package:transport_sy/injection.dart';
@@ -141,7 +142,7 @@ class _SettingsPageState extends State<SettingsPage> {
               value: "100 ل.س", // Placeholder value, replace with actual data
               trailingWidget: ElevatedButton(
                 onPressed: () {
-                  context.push(TripLogsPage.path);
+                  context.push(AuthWalletPage.path);
                   // Navigate to user's trips page
                 },
                 child: Text("عرض المحفظة"),

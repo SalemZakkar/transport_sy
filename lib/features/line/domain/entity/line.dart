@@ -57,7 +57,7 @@ final List<Line> lines = [
   Line(
     id: 2,
     name: 'الزهراء - وسط المدينة',
-    amount: 750,
+    amount: 5000,
     points: [
       LatLng(34.7310, 36.7610), // حي الزهراء (start, east)
       LatLng(34.7305, 36.7560), // الزهراء الغربية
@@ -76,7 +76,7 @@ final List<Line> lines = [
   Line(
     id: 3,
     name: 'عكرمة - وسط المدينة',
-    amount: 800,
+    amount: 40000,
     points: [
       LatLng(34.7020, 36.7210), // حي عكرمة الجنوبية (start, south)
       LatLng(34.7060, 36.7210), // عكرمة القديمة

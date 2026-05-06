@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:icons_plus/icons_plus.dart';
 
 import 'app_colors_shema.dart';
 
@@ -8,6 +9,10 @@ class AppTheme {
   AppTheme(this._schema);
 
   ThemeData getThemeData({String? fontFamily}) => ThemeData(
+    actionIconTheme: ActionIconThemeData(
+      backButtonIconBuilder: (context) =>
+          Icon(Icons.arrow_back_ios_new, color: Colors.white),
+    ),
     primaryColor: _schema.primary,
     fontFamily: fontFamily,
     colorScheme: ColorScheme.fromSeed(
@@ -19,6 +24,9 @@ class AppTheme {
       backgroundColor: _schema.primary,
       centerTitle: true,
       toolbarHeight: 80,
+      iconTheme: IconThemeData(
+        color: Colors.white
+      ),
       titleTextStyle: TextStyle(
         color: _schema.white,
         fontSize: 24,

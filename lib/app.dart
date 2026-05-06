@@ -1,5 +1,6 @@
 import 'package:core_package/core_package.dart';
 import 'package:core_package/generated/core_translation/core_translations.dart';
+import 'package:flutter/services.dart';
 import 'package:transport_sy/features/auth/presentation/page/presentation/auth_login_page.dart';
 import 'package:transport_sy/features/auth/presentation/page/presentation/auth_user_complete_page.dart';
 import 'package:transport_sy/features/core/presentation/page/splash_page.dart';
@@ -24,9 +25,11 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
     AppRoutes.init(SplashPage.path);
-    // ScreenLoader.setDialogProvider(MainScreenLoaderDialogProvider());
-    WidgetsBinding.instance.addPostFrameCallback((e) {
-    });
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    WidgetsBinding.instance.addPostFrameCallback((e) {});
   }
 
   var authCubit = getIt<AuthCubit>();
