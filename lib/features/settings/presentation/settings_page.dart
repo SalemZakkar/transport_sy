@@ -60,25 +60,14 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _buildActionButtons(BuildContext context, bool isMobile) {
     return SizedBox(
-      width: double.infinity,
-      child: Wrap(
-        spacing: isMobile ? 8 : 12,
-        runSpacing: isMobile ? 8 : 12,
-        children: [
-          Expanded(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red[400],
-                ),
-                onPressed: () => _handleLogout(context),
-                child: const Text("تسجيل الخروج"),
-              ),
-            ),
-          ),
-        ],
+      width: MediaQuery.of(context).size.width,
+      height: 48,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.red[400],
+        ),
+        onPressed: () => _handleLogout(context),
+        child: const Text("تسجيل الخروج"),
       ),
     );
   }
