@@ -1,12 +1,11 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
-    namespace = "com.example.transport_sy"
+    namespace = "com.swhackathon.transport_sy"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -19,12 +18,31 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
+    flavorDimensions.add("app")
+
+    productFlavors {
+        create("mainApp") {
+            dimension = "app"
+            applicationId = "com.swhackathon.transport_sy"
+            resValue("string", "app_name", "تنقل")
+
+            // Main app flavor configuration
+            manifestPlaceholders["flavorName"] = "mainApp"
+        }
+
+        create("nfcEmulator") {
+            dimension = "app"
+            applicationId = "com.swhackathon.transport_sy.nfc"
+            resValue("string", "app_name", "NFC Emulator")
+
+            // NFC Emulator flavor configuration
+            manifestPlaceholders["flavorName"] = "nfcEmulator"
+        }
+    }
+
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.transport_sy"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        applicationId = "com.swhackathon.transport_sy"
+        minSdk = 28
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -32,9 +50,19 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
+        }
+    }
+
+    sourceSets {
+        // Main app flavor uses main.dart
+        getByName("mainApp") {
+            // Flutter will use lib/main.dart by default for mainApp
+        }
+
+        // NFC Emulator flavor uses main_nfc.dart
+        getByName("nfcEmulator") {
+            // Flutter will use lib/main_nfc.dart for nfcEmulator
         }
     }
 }

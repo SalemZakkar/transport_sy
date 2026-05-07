@@ -1,4 +1,4 @@
-package com.example.transport_sy
+package com.swhackathon.transport_sy
 
 import android.nfc.cardemulation.HostApduService
 import android.os.Bundle

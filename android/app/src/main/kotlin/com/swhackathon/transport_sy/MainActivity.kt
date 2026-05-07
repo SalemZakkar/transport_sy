@@ -1,4 +1,4 @@
-package com.example.transport_sy
+package com.swhackathon.transport_sy
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
