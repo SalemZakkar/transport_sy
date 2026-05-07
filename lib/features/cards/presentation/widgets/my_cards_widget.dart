@@ -8,6 +8,7 @@ import 'package:transport_sy/features/cards/presentation/widgets/card_add_dialog
 import 'package:transport_sy/features/cards/presentation/widgets/card_charge_dialog.dart';
 import 'package:transport_sy/features/core/presentation/dialogs/dialog_util.dart';
 import 'package:transport_sy/features/core/presentation/widget/bloc/user_builder.dart';
+import 'package:transport_sy/features/trips/presentation/page/trip_logs_page.dart';
 import 'package:transport_sy/injection.dart';
 import 'package:transport_sy/themes/app_colors_shema.dart';
 
@@ -38,6 +39,43 @@ class _MyCardsWidgetState extends State<MyCardsWidget> {
             builder: (context, state) {
               return Column(
                 children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            context.push(TripLogsPage.path);
+                          },
+                          child: Text("رحلاتي"),
+                        ),
+                      ),
+                      16.width(),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => CardAddDialog(
+                                onChanged: (number) {
+                                  if (cubit.exists(number)) {
+                                    DialogUtil(
+                                      context: context,
+                                    ).showErrorDialog(
+                                      message: "البطاقة موجودة مسبقا",
+                                    );
+                                    return;
+                                  }
+                                  cubit.add(number);
+                                },
+                              ),
+                            );
+                          },
+                          child: Text("إضافة بطاقة"),
+                        ),
+                      ),
+                    ],
+                  ),
+                  16.height(),
                   for (var e in state) ...[
                     CustomCardWidget(
                       child: SizedBox(
@@ -133,28 +171,6 @@ class _MyCardsWidgetState extends State<MyCardsWidget> {
                     ),
                     16.height(),
                   ],
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => CardAddDialog(
-                            onChanged: (number) {
-                              if (cubit.exists(number)) {
-                                DialogUtil(context: context).showErrorDialog(
-                                  message: "البطاقة موجودة مسبقا",
-                                );
-                                return;
-                              }
-                              cubit.add(number);
-                            },
-                          ),
-                        );
-                      },
-                      child: Text("إضافة بطاقة"),
-                    ),
-                  ),
                 ],
               );
             },

@@ -4,10 +4,12 @@ import 'package:transport_sy/features/auth/domain/entity/user.dart';
 import 'package:transport_sy/features/auth/domain/enum/user_type.dart';
 import 'package:transport_sy/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:transport_sy/features/auth/presentation/page/presentation/auth_wallet_page.dart';
+import 'package:transport_sy/features/core/presentation/page/complains_page.dart';
 import 'package:transport_sy/features/core/presentation/widget/bloc/user_builder.dart';
+import 'package:transport_sy/features/trips/domain/entity/trip.dart';
 import 'package:transport_sy/features/trips/presentation/page/trip_logs_page.dart';
 import 'package:transport_sy/injection.dart';
-import 'package:intl/intl.dart'; // Add this import for date formatting
+import 'package:intl/intl.dart';
 
 class SettingsPage extends StatefulWidget {
   static String path = "/SettingsPage";
@@ -21,26 +23,23 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
+
     return Scaffold(
-      appBar: AppBar(title: Text("الإعدادات")),
-      body: Container(
-        constraints: const BoxConstraints.expand(),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: UserBuilder(
-              builder: (user) => Column(
-                children: [
-                  _buildUserCard(user, context),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: getIt<AuthCubit>().logout,
-                      child: Text("تسجيل الخروج"),
-                    ),
-                  ),
-                ],
+      appBar: AppBar(
+        title: const Text("الإعدادات"),
+        elevation: 0,
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: Container(
+          constraints: const BoxConstraints.expand(),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Padding(
+              padding: EdgeInsets.all(isMobile ? 16 : 24),
+              child: UserBuilder(
+                builder: (user) => _buildContent(user, context, isMobile),
               ),
             ),
           ),
@@ -49,7 +48,65 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Widget _buildUserCard(User user, BuildContext context) {
+  Widget _buildContent(User user, BuildContext context, bool isMobile) {
+    return Column(
+      children: [
+        _buildUserCard(user, context, isMobile),
+        SizedBox(height: isMobile ? 16 : 24),
+        _buildActionButtons(context, isMobile),
+      ],
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context, bool isMobile) {
+    return SizedBox(
+      width: double.infinity,
+      child: Wrap(
+        spacing: isMobile ? 8 : 12,
+        runSpacing: isMobile ? 8 : 12,
+        children: [
+          Expanded(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 48,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red[400],
+                ),
+                onPressed: () => _handleLogout(context),
+                child: const Text("تسجيل الخروج"),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleLogout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) => AlertDialog(
+        title: const Text("تسجيل الخروج"),
+        content: const Text("هل أنت متأكد من رغبتك في تسجيل الخروج؟"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text("إلغاء"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              getIt<AuthCubit>().logout();
+            },
+            child: const Text("تسجيل الخروج"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUserCard(User user, BuildContext context, bool isMobile) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -57,107 +114,126 @@ class _SettingsPageState extends State<SettingsPage> {
         side: BorderSide(color: Theme.of(context).dividerColor),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(isMobile ? 16 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // User header with avatar
-            Row(
-              children: [
-                _buildUserAvatar(user),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        user.name ?? "مستخدم غير معروف",
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        _getUserTypeArabic(user.type),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-
-            // User details grid
-            _buildDetailItem(
-              icon: Icons.phone,
-              label: "الهاتف",
-              value: user.phone,
-            ),
-            _buildDetailItem(
-              icon: Icons.location_city,
-              label: "المدينة",
-              value: user.city,
-            ),
-            _buildDetailItem(
-              icon: Icons.home,
-              label: "العنوان",
-              value: user.address,
-            ),
-            _buildDetailItem(
-              icon: Icons.cake,
-              label: "تاريخ الميلاد",
-              value: DateFormat('dd/MM/yyyy').format(user.birth),
-            ),
-            _buildDetailItem(
-              icon: Icons.account_balance_wallet,
-              label: "الرصيد",
-              value: "${NumberFormat('#,##0').format(user.balance)} ل.س",
-            ),
-            _buildDetailItem(
-              icon: Icons.verified_user,
-              label: "الجنس",
-              value: _getGenderArabic(user.gender),
-            ),
-            _buildDetailItem(
-              icon: Icons.bus_alert_outlined,
-              label: "رحلاتي",
-              value: "5 رحلات", // Placeholder value, replace with actual data
-              trailingWidget: ElevatedButton(
-                onPressed: () {
-                  context.push(TripLogsPage.path);
-                  // Navigate to user's trips page
-                },
-                child: Text("عرض الرحلات"),
-              ),
-            ),
-            _buildDetailItem(
-              icon: Icons.wallet,
-              label: "المحفظة",
-              value: "100 ل.س", // Placeholder value, replace with actual data
-              trailingWidget: ElevatedButton(
-                onPressed: () {
-                  context.push(AuthWalletPage.path);
-                  // Navigate to user's trips page
-                },
-                child: Text("عرض المحفظة"),
-              ),
-            ),
+            _buildUserHeader(user, context, isMobile),
+            SizedBox(height: isMobile ? 16 : 20),
+            _buildDetailsList(user, context, isMobile),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildUserAvatar(User user) {
+  Widget _buildUserHeader(User user, BuildContext context, bool isMobile) {
+    return Row(
+      children: [
+        _buildUserAvatar(user, isMobile),
+        SizedBox(width: isMobile ? 12 : 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                user.name ?? "مستخدم غير معروف",
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                  fontSize: isMobile ? 16 : 18,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(height: isMobile ? 2 : 4),
+              Text(
+                _getUserTypeArabic(user.type),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: isMobile ? 12 : 14,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDetailsList(User user, BuildContext context, bool isMobile) {
+    final trips = _getSafeTrips(); // Safe trips retrieval
+
+    return Column(
+      children: [
+        _buildDetailItem(
+          icon: Icons.phone,
+          label: "الهاتف",
+          value: user.phone ?? "غير محدد",
+          isMobile: isMobile,
+        ),
+        _buildDetailItem(
+          icon: Icons.location_city,
+          label: "المدينة",
+          value: user.city ?? "غير محدد",
+          isMobile: isMobile,
+        ),
+        _buildDetailItem(
+          icon: Icons.home,
+          label: "العنوان",
+          value: user.address ?? "غير محدد",
+          isMobile: isMobile,
+        ),
+        _buildDetailItem(
+          icon: Icons.cake,
+          label: "تاريخ الميلاد",
+          value: _formatBirthDate(user.birth),
+          isMobile: isMobile,
+        ),
+        _buildDetailItem(
+          icon: Icons.verified_user,
+          label: "الجنس",
+          value: _getGenderArabic(user.gender ?? ""),
+          isMobile: isMobile,
+        ),
+        _buildDetailItem(
+          icon: Icons.bus_alert_outlined,
+          label: "رحلاتي",
+          value: trips.length.toString(),
+          isMobile: isMobile,
+          trailingWidget: _buildNavigationButton(
+            onPressed: () => _navigateSafely(context, TripLogsPage.path),
+          ),
+        ),
+        _buildDetailItem(
+          icon: Icons.wallet,
+          label: "المحفظة",
+          value: _formatBalance(user.balance),
+          isMobile: isMobile,
+          trailingWidget: _buildNavigationButton(
+            onPressed: () => _navigateSafely(context, AuthWalletPage.path),
+          ),
+        ),
+        _buildDetailItem(
+          icon: Icons.report_problem_outlined,
+          label: "الشكاوي",
+          value: "قائمة الشكاوي الخاصة بك",
+          isMobile: isMobile,
+          trailingWidget: _buildNavigationButton(
+            onPressed: () => _navigateSafely(context, ComplainsPage.path),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUserAvatar(User user, bool isMobile) {
+    final avatarSize = isMobile ? 64.0 : 72.0;
+    final fontSize = isMobile ? 24.0 : 28.0;
+
     return Container(
-      width: 72,
-      height: 72,
+      width: avatarSize,
+      height: avatarSize,
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
         shape: BoxShape.circle,
@@ -165,11 +241,9 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       child: Center(
         child: Text(
-          user.name != null && user.name!.isNotEmpty
-              ? user.name![0].toUpperCase()
-              : "?",
+          _getAvatarText(user.name),
           style: TextStyle(
-            fontSize: 28,
+            fontSize: fontSize,
             fontWeight: FontWeight.bold,
             color: Theme.of(context).primaryColor,
           ),
@@ -183,38 +257,54 @@ class _SettingsPageState extends State<SettingsPage> {
     required String label,
     required String value,
     Widget? trailingWidget,
+    required bool isMobile,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.symmetric(vertical: isMobile ? 8 : 10),
       child: Row(
         mainAxisAlignment: trailingWidget != null
             ? MainAxisAlignment.spaceBetween
             : MainAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(icon, size: 20, color: Theme.of(context).primaryColor),
-              const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).hintColor,
-                    ),
+          Expanded(
+            child: Row(
+              children: [
+                Icon(
+                  icon,
+                  size: isMobile ? 18 : 20,
+                  color: Theme.of(context).primaryColor,
+                ),
+                SizedBox(width: isMobile ? 10 : 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).hintColor,
+                          fontSize: isMobile ? 12 : 14,
+                        ),
+                      ),
+                      SizedBox(height: isMobile ? 1 : 2),
+                      Text(
+                        value,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontSize: isMobile ? 13 : 15,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 2),
-
-                  Text(value, style: Theme.of(context).textTheme.bodyLarge),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
           if (trailingWidget != null)
             Padding(
-              padding: const EdgeInsets.only(top: 8),
+              padding: EdgeInsets.only(left: isMobile ? 4 : 8),
               child: trailingWidget,
             ),
         ],
@@ -222,19 +312,81 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  Widget _buildNavigationButton({required VoidCallback onPressed}) {
+    return IconButton(
+      onPressed: onPressed,
+      icon: const Icon(Icons.arrow_forward_ios),
+      iconSize: 18,
+      constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+      padding: EdgeInsets.zero,
+    );
+  }
+
+  // Safe helper methods
   String _getUserTypeArabic(UserType type) {
-    switch (type) {
-      case UserType.rider:
-        return "راكب";
-      case UserType.driver:
-        return "سائق";
-    }
+    return switch (type) {
+      UserType.rider => "راكب",
+      UserType.driver => "سائق",
+    };
   }
 
   String _getGenderArabic(String gender) {
+    if (gender.isEmpty) return "غير محدد";
     final lowerGender = gender.toLowerCase();
-    if (lowerGender == 'male' || lowerGender == 'm') return "ذكر";
-    if (lowerGender == 'female' || lowerGender == 'f') return "أنثى";
-    return gender;
+    return switch (lowerGender) {
+      'male' || 'm' => "ذكر",
+      'female' || 'f' => "أنثى",
+      _ => gender,
+    };
+  }
+
+  String _getAvatarText(String? name) {
+    if (name == null || name.isEmpty) return "?";
+    return name[0].toUpperCase();
+  }
+
+  String _formatBirthDate(DateTime? date) {
+    if (date == null) return "غير محدد";
+    try {
+      return DateFormat('dd/MM/yyyy').format(date);
+    } catch (e) {
+      return "غير محدد";
+    }
+  }
+
+  String _formatBalance(num? balance) {
+    if (balance == null) return "0 SP";
+    try {
+      return balance.toString().addSyp;
+    } catch (e) {
+      return "0 SP";
+    }
+  }
+
+  List<Trip> _getSafeTrips() {
+    try {
+      // Replace with actual trips retrieval from your state management
+      // This is a safe fallback to empty list
+      return []; // TODO: Get from actual state
+    } catch (e) {
+      return [];
+    }
+  }
+
+  void _navigateSafely(BuildContext context, String path) {
+    try {
+      if (context.mounted) {
+        context.push(path);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text("حدث خطأ أثناء الملاحة"),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    }
   }
 }

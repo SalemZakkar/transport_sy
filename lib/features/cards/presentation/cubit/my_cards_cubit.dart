@@ -79,6 +79,19 @@ class MyCardsCubit extends Cubit<List<KCard>> {
   }
 
   void add(String number) {
+    cards.clear();
+    cards.addAll(
+      List.from([
+        KCard(
+          id: state.length,
+          number: number,
+          balance: Random(DateTime.now().microsecond).nextInt(20000) + 10000,
+          userId: getIt<AuthCubit>().state.user.id,
+          deletable: true,
+        ),
+        ...state,
+      ]),
+    );
     emit(
       List.from([
         KCard(

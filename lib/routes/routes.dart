@@ -3,6 +3,7 @@ import 'package:transport_sy/features/auth/presentation/page/presentation/auth_l
 import 'package:transport_sy/features/auth/presentation/page/presentation/auth_user_complete_page.dart';
 import 'package:transport_sy/features/auth/presentation/page/presentation/auth_verify_otp_page.dart';
 import 'package:transport_sy/features/auth/presentation/page/presentation/auth_wallet_page.dart';
+import 'package:transport_sy/features/core/presentation/page/complains_page.dart';
 import 'package:transport_sy/features/core/presentation/page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:transport_sy/features/core/presentation/page/nav_page.dart';
@@ -73,6 +74,10 @@ class AppRoutes {
     GoRoute(
       builder: (context, state) => TripLogsPage(),
       path: TripLogsPage.path,
+    ),
+    GoRoute(
+      builder: (context, state) => const ComplainsPage(),
+      path: ComplainsPage.path,
     ),
   ];
 }
